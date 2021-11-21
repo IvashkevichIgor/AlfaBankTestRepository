@@ -41,9 +41,10 @@ public class CurrencyController {
         double yesterdayCurrencyRate = yesterdayResponse.getRates().get(code);
 
         GiphyResponse response = giphyClient.getGif(giphyAPIKey, getTag(currentCurrencyRate, yesterdayCurrencyRate));
+        String URL = (String) response.getData().get("url");
         String embedURL = (String) response.getData().get("embed_url");
-        model.addAttribute("giphyUrl", embedURL);
-        System.out.println(embedURL);
+        model.addAttribute("giphyUrl", URL);
+        model.addAttribute("giphyEmbedUrl", embedURL);
         return "exchangeRateCheck";
     }
 
