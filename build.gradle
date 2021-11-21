@@ -33,3 +33,8 @@ dependencyManagement {
 test {
     useJUnitPlatform()
 }
+
+apply plugin: 'application'
+
+mainClassName = 'ru.ivashkevich.exchangeratecheck.ExchangeRateCheckApplication'
+
