@@ -2,10 +2,10 @@ package ru.ivashkevich.exchangeratecheck;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -13,7 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-@RestController
+@Controller
 public class CurrencyController {
 
     private OpenExchangeRatesClient openExchangeRatesClient;
@@ -30,7 +30,7 @@ public class CurrencyController {
     }
 
     @GetMapping("/currency/{code}")
-    public String exchangeRate(@PathVariable String code){
+    public String exchangeRate(@PathVariable String code, Model model){
         CurrencyRateResponse currentResponse =
                 openExchangeRatesClient.getCurrentCurrencyRate(openExchangeRatesAppId, code);
         double currentCurrencyRate = currentResponse.getRates().get(code);
@@ -40,9 +40,11 @@ public class CurrencyController {
                 openExchangeRatesClient.getYesterdayCurrencyRate(openExchangeRatesAppId,yesterdayDateString, code);
         double yesterdayCurrencyRate = yesterdayResponse.getRates().get(code);
 
-        ResponseEntity<?> gif = giphyClient.getGif(giphyAPIKey, getTag(currentCurrencyRate, yesterdayCurrencyRate));
-
-        return gif.toString();
+        GiphyResponse response = giphyClient.getGif(giphyAPIKey, getTag(currentCurrencyRate, yesterdayCurrencyRate));
+        String embedURL = (String) response.getData().get("embed_url");
+        model.addAttribute("giphyUrl", embedURL);
+        System.out.println(embedURL);
+        return "exchangeRateCheck";
     }
 
     private String getYesterdayDateString() {
