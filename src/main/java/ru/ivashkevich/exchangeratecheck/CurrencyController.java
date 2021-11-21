@@ -1,6 +1,8 @@
 package ru.ivashkevich.exchangeratecheck;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,29 +17,32 @@ import java.util.GregorianCalendar;
 public class CurrencyController {
 
     private OpenExchangeRatesClient openExchangeRatesClient;
+    private GiphyClient giphyClient;
+    @Value("${openExchangeRates.app_id}")
+    private String openExchangeRatesAppId;
+    @Value("${giphy.api_key}")
+    private String giphyAPIKey;
 
     @Autowired
-    public CurrencyController(OpenExchangeRatesClient openExchangeRatesClient) {
+    public CurrencyController(OpenExchangeRatesClient openExchangeRatesClient, GiphyClient giphyClient) {
         this.openExchangeRatesClient = openExchangeRatesClient;
+        this.giphyClient = giphyClient;
     }
 
     @GetMapping("/currency/{code}")
-    public String exchangeRate(@PathVariable(value = "code") String code){
-        CurrencyRateResponse currentResponse = openExchangeRatesClient.getCurrentCurrencyRate(code);
-        Double currentCurrencyRate = currentResponse.getRates().get(code);
+    public String exchangeRate(@PathVariable String code){
+        CurrencyRateResponse currentResponse =
+                openExchangeRatesClient.getCurrentCurrencyRate(openExchangeRatesAppId, code);
+        double currentCurrencyRate = currentResponse.getRates().get(code);
 
         String yesterdayDateString = getYesterdayDateString();
-        CurrencyRateResponse yesterdayResponse = openExchangeRatesClient.getYesterdayCurrencyRate(yesterdayDateString, code);
-        Double yesterdayCurrencyRate = yesterdayResponse.getRates().get(code);
+        CurrencyRateResponse yesterdayResponse =
+                openExchangeRatesClient.getYesterdayCurrencyRate(openExchangeRatesAppId,yesterdayDateString, code);
+        double yesterdayCurrencyRate = yesterdayResponse.getRates().get(code);
 
-        String result = "current: " + currentCurrencyRate + "\n" + "yesterday: " + yesterdayCurrencyRate + "\n";
+        ResponseEntity<?> gif = giphyClient.getGif(giphyAPIKey, getTag(currentCurrencyRate, yesterdayCurrencyRate));
 
-        if (currentCurrencyRate > yesterdayCurrencyRate){
-            result += "You're rich!";
-        }
-        else
-            result += "You're broke";
-        return result;
+        return gif.toString();
     }
 
     private String getYesterdayDateString() {
@@ -46,6 +51,18 @@ public class CurrencyController {
         Date yesterdayDate = calendar.getTime();
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         return formatter.format(yesterdayDate);
+    }
+
+    private String getTag(double currentCurrencyRate, double yesterdayCurrencyRate){
+        String tag;
+        if (currentCurrencyRate > yesterdayCurrencyRate){
+            tag = "rich";
+        }
+        else if(currentCurrencyRate < yesterdayCurrencyRate){
+            tag = "broke";
+        }
+        else tag = "nothing";
+        return tag;
     }
 
     public OpenExchangeRatesClient getOpenExchangeRatesClient() {
