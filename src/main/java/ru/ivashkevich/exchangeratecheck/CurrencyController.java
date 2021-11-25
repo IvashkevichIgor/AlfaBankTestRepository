@@ -31,16 +31,16 @@ public class CurrencyController {
 
     @GetMapping("/currency/{code}")
     public String exchangeRate(@PathVariable String code, Model model){
-        CurrencyRateResponse currentResponse =
+        CurrencyRateDTO currentResponse =
                 openExchangeRatesClient.getCurrentCurrencyRate(openExchangeRatesAppId, code);
         double currentCurrencyRate = currentResponse.getRates().get(code);
 
         String yesterdayDateString = getYesterdayDateString();
-        CurrencyRateResponse yesterdayResponse =
+        CurrencyRateDTO yesterdayResponse =
                 openExchangeRatesClient.getYesterdayCurrencyRate(openExchangeRatesAppId,yesterdayDateString, code);
         double yesterdayCurrencyRate = yesterdayResponse.getRates().get(code);
 
-        GiphyResponse response = giphyClient.getGif(giphyAPIKey, getTag(currentCurrencyRate, yesterdayCurrencyRate));
+        GiphyDTO response = giphyClient.getGif(giphyAPIKey, getTag(currentCurrencyRate, yesterdayCurrencyRate));
         String URL = (String) response.getData().get("url");
         String embedURL = (String) response.getData().get("embed_url");
         model.addAttribute("giphyUrl", URL);

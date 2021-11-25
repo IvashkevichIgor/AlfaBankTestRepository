@@ -2,11 +2,11 @@ package ru.ivashkevich.exchangeratecheck;
 
 import java.util.Map;
 
-public class GiphyResponse {
+public class GiphyDTO {
     private Map<String, Object> data;
     private Map<String, String> meta;
 
-    public GiphyResponse(Map<String, Object> data, Map<String, String> meta) {
+    public GiphyDTO(Map<String, Object> data, Map<String, String> meta) {
         this.data = data;
         this.meta = meta;
     }

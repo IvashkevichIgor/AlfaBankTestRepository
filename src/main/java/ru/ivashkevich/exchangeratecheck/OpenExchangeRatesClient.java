@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface OpenExchangeRatesClient {
 
     @GetMapping("/latest.json")
-    CurrencyRateResponse getCurrentCurrencyRate(@RequestParam("app_id") String id, @RequestParam("symbols") String code);
+    CurrencyRateDTO getCurrentCurrencyRate(@RequestParam("app_id") String id, @RequestParam("symbols") String code);
 
     @GetMapping("/historical/{date}.json")
-    CurrencyRateResponse getYesterdayCurrencyRate(
+    CurrencyRateDTO getYesterdayCurrencyRate(
             @RequestParam("app_id") String id, @PathVariable String date, @RequestParam("symbols") String code);
 }
 

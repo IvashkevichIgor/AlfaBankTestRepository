@@ -2,14 +2,14 @@ package ru.ivashkevich.exchangeratecheck;
 
 import java.util.Map;
 
-public class CurrencyRateResponse {
+public class CurrencyRateDTO {
     private String disclaimer;
     private String license;
     private String timestamp;
     private String base;
     private Map<String, Double> rates;
 
-    public CurrencyRateResponse(String disclaimer, String license, String timestamp, String base, Map<String, Double> rates) {
+    public CurrencyRateDTO(String disclaimer, String license, String timestamp, String base, Map<String, Double> rates) {
         this.disclaimer = disclaimer;
         this.license = license;
         this.timestamp = timestamp;
