@@ -11,7 +11,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.IOException;
@@ -37,10 +36,20 @@ public class OpenExchangeRatesClientIntegrationTest {
 
     @Test
     public void whenGetLatest_thenCurrencyRateDTOShouldBeReturned() {
-        System.out.println(openExchangeRatesClient.getCurrentCurrencyRate(openExchangeRatesAppId, "RUB"));
         CurrencyRateDTO currencyRateDTO = openExchangeRatesClient.getCurrentCurrencyRate(openExchangeRatesAppId, "RUB");
         Assertions.assertFalse(currencyRateDTO.getRates().isEmpty());
         Assertions.assertTrue(currencyRateDTO.getRates().containsKey("RUB"));
         Assertions.assertFalse(currencyRateDTO.getRates().get("RUB").isNaN());
+        Assertions.assertEquals(currencyRateDTO.getTimestamp(), "1637852399");
+    }
+
+    @Test
+    public void whenGetHistorical_thenCurrencyRateDTOShouldBeReturned(){
+        CurrencyRateDTO currencyRateDTO = openExchangeRatesClient
+                .getYesterdayCurrencyRate(openExchangeRatesAppId, "2021-11-24", "RUB");
+        Assertions.assertFalse(currencyRateDTO.getRates().isEmpty());
+        Assertions.assertTrue(currencyRateDTO.getRates().containsKey("RUB"));
+        Assertions.assertFalse(currencyRateDTO.getRates().get("RUB").isNaN());
+        Assertions.assertEquals(currencyRateDTO.getTimestamp(), "1637798388");
     }
 }
