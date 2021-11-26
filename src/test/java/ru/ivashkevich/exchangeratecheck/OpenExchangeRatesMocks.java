@@ -12,7 +12,7 @@ import static org.springframework.util.StreamUtils.copyToString;
 
 public class OpenExchangeRatesMocks {
 
-    public static void setupMockLatestResponse(WireMockServer mockService) throws IOException {
+    public static void setupMockOpenExchangeRatesResponse(WireMockServer mockService) throws IOException {
         mockService.stubFor(WireMock.get(WireMock.urlEqualTo("/latest.json?app_id=8aaa3e083460483e905320992d569147&symbols=RUB"))
                 .willReturn(WireMock.aResponse()
                         .withStatus(HttpStatus.OK.value())

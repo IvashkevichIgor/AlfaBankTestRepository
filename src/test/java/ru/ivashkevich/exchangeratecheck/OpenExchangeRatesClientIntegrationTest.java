@@ -31,7 +31,7 @@ public class OpenExchangeRatesClientIntegrationTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        OpenExchangeRatesMocks.setupMockLatestResponse(mockOpenExchangeRatesService);
+        OpenExchangeRatesMocks.setupMockOpenExchangeRatesResponse(mockOpenExchangeRatesService);
     }
 
     @Test
