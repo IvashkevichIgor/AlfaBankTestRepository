@@ -35,8 +35,14 @@ public class GiphyClientIntegrationTest {
     }
 
     @Test
-    public void whenGetLatest_thenCurrencyRateDTOShouldBeReturned() {
+    public void whenGetLatest_thenGiphyDTOShouldBeReturned() {
         GiphyDTO giphyDTO = giphyClient.getGif(key, "rich");
         Assertions.assertFalse(giphyDTO.getData().isEmpty());
+
+        Assertions.assertTrue(giphyDTO.getData().containsKey("url"));
+        Assertions.assertTrue(giphyDTO.getData().containsKey("embed_url"));
+
+        Assertions.assertFalse(((String)(giphyDTO.getData().get("url"))).isEmpty());
+        Assertions.assertFalse(((String)(giphyDTO.getData().get("embed_url"))).isEmpty());
     }
 }
