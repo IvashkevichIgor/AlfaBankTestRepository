@@ -40,7 +40,7 @@ public class OpenExchangeRatesClientIntegrationTest {
         Assertions.assertFalse(currencyRateDTO.getRates().isEmpty());
         Assertions.assertTrue(currencyRateDTO.getRates().containsKey("RUB"));
         Assertions.assertFalse(currencyRateDTO.getRates().get("RUB").isNaN());
-        Assertions.assertEquals(currencyRateDTO.getTimestamp(), "1637852399");
+        Assertions.assertEquals("1637852399", currencyRateDTO.getTimestamp());
     }
 
     @Test
@@ -50,6 +50,6 @@ public class OpenExchangeRatesClientIntegrationTest {
         Assertions.assertFalse(currencyRateDTO.getRates().isEmpty());
         Assertions.assertTrue(currencyRateDTO.getRates().containsKey("RUB"));
         Assertions.assertFalse(currencyRateDTO.getRates().get("RUB").isNaN());
-        Assertions.assertEquals(currencyRateDTO.getTimestamp(), "1637798388");
+        Assertions.assertEquals("1637798388", currencyRateDTO.getTimestamp());
     }
 }
