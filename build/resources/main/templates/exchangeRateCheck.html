@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gif from Giphy.com</title>
+</head>
+<body>
+<iframe th:src="${giphyEmbedUrl}" width="480" height="269" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+<p>
+    <a th:href="${giphyUrl}">via GIPHY</a>
+</p>
+</body>
+</html>
